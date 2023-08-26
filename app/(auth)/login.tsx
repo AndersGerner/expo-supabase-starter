@@ -11,17 +11,17 @@ import { Alert, AlertRef } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useSupabase } from '@/context/useSupabase';
+import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 import { isError } from '@/types/guards';
 
 const FormSchema = z.object({
-  email: z.string().email('Please enter a valid email address.'),
+  email: z.string().email(t('login.email.errors.invalid')),
   password: z
     .string()
-    .min(8, 'Please enter at least 8 characters.')
-    .max(64, 'Please enter fewer than 64 characters.'),
+    .min(8, t('login.password.errors.minLength'))
+    .max(64, t('login.password.errors.maxLength')),
 });
-
 export default function Login() {
   const { signInWithPassword } = useSupabase();
   const router = useRouter();
@@ -58,7 +58,7 @@ export default function Login() {
       <Text
         style={tw`h1 text-foreground dark:text-dark-foreground self-start mb-5`}
       >
-        Login
+        {t('login.title')}
       </Text>
       <View style={tw`w-full gap-y-4`}>
         <Controller
@@ -66,8 +66,8 @@ export default function Login() {
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label="Email"
-              placeholder="Email"
+              label={t('login.email.label')}
+              placeholder={t('login.email.placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={() => {
@@ -87,8 +87,8 @@ export default function Login() {
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label="Password"
-              placeholder="Password"
+              label={t('login.password.label')}
+              placeholder={t('login.password.placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={() => {
@@ -106,7 +106,7 @@ export default function Login() {
       </View>
       <View style={tw`w-full gap-y-4 absolute bottom-[50px]`}>
         <Button
-          label="Login"
+          label={t('login.buttonLabel')}
           onPress={handleSubmit(onSubmit)}
           isLoading={isSubmitting}
         />
@@ -116,7 +116,7 @@ export default function Login() {
             router.back();
           }}
         >
-          Don't have an account?
+          {t('login.noAccount')}
         </Text>
       </View>
     </SafeAreaView>

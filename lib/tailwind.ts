@@ -1,4 +1,4 @@
-// lib/tailwind.js
+// lib/tailwind.ts
 import { create } from 'twrnc';
 
 // create the customized version...

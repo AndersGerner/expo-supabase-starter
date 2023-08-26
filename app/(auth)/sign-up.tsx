@@ -11,33 +11,27 @@ import { Alert, AlertRef } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useSupabase } from '@/context/useSupabase';
+import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 import { isError } from '@/types/guards';
 
 const FormSchema = z
   .object({
-    email: z.string().email('Please enter a valid email address.'),
+    email: z.string().email(t('signUp.email.errors.invalid')),
     password: z
       .string()
-      .min(8, 'Please enter at least 8 characters.')
-      .max(64, 'Please enter fewer than 64 characters.')
-      .regex(
-        /^(?=.*[a-z])/,
-        'Your password must have at least one lowercase letter.',
-      )
-      .regex(
-        /^(?=.*[A-Z])/,
-        'Your password must have at least one uppercase letter.',
-      )
-      .regex(/^(?=.*[0-9])/, 'Your password must have at least one number.')
-      .regex(
-        /^(?=.*[!@#$%^&*])/,
-        'Your password must have at least one special character.',
-      ),
-    confirmPassword: z.string().min(8, 'Please enter at least 8 characters.'),
+      .min(8, t('signUp.password.errors.minLength'))
+      .max(64, t('signUp.password.errors.maxLength'))
+      .regex(/^(?=.*[a-z])/, t('signUp.password.errors.lowerCase'))
+      .regex(/^(?=.*[A-Z])/, t('signUp.password.errors.upperCase'))
+      .regex(/^(?=.*[0-9])/, t('signUp.password.errors.number'))
+      .regex(/^(?=.*[!@#$%^&*])/, t('signUp.password.errors.specialChar')),
+    confirmPassword: z
+      .string()
+      .min(8, t('signUp.confirmPassword.errors.notMatch')),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Your passwords do not match.',
+    message: t('signUp.confirmPassword.errors.notMatch'),
     path: ['confirmPassword'],
   });
 
@@ -81,7 +75,7 @@ export default function SignUp() {
       <Text
         style={tw`h1 text-foreground dark:text-dark-foreground self-start mb-5`}
       >
-        Welcome
+        {t('general.welcome')}
       </Text>
       <View style={tw`w-full gap-y-4`}>
         <Controller
@@ -89,8 +83,8 @@ export default function SignUp() {
           name="email"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="Email"
-              placeholder="Email"
+              label={t('signUp.email.label')}
+              placeholder={t('signUp.email.placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={() => {
@@ -109,8 +103,8 @@ export default function SignUp() {
           name="password"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="Password"
-              placeholder="Password"
+              label={t('signUp.password.label')}
+              placeholder={t('signUp.password.placeholder')}
               value={value}
               onChangeText={onChange}
               onFocus={() => {
@@ -131,8 +125,8 @@ export default function SignUp() {
           name="confirmPassword"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="Confirm password"
-              placeholder="Confirm password"
+              label={t('signUp.confirmPassword.label')}
+              placeholder={t('signUp.confirmPassword.placeholder')}
               value={value}
               onChangeText={onChange}
               onBlur={() => {
@@ -148,7 +142,7 @@ export default function SignUp() {
       </View>
       <View style={tw`w-full gap-y-4 absolute bottom-[50px]`}>
         <Button
-          label="Sign Up"
+          label={t('signUp.buttonLabel')}
           onPress={handleSubmit(onSubmit)}
           isLoading={isSubmitting}
         />
@@ -158,7 +152,7 @@ export default function SignUp() {
             router.push('/login');
           }}
         >
-          Already have an account?
+          {t('signUp.alreadyHaveAccount')}
         </Text>
       </View>
     </SafeAreaView>

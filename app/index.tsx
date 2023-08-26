@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 
 import { useSupabase } from '@/context/useSupabase';
+import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 
 export default function Index() {
@@ -14,7 +15,7 @@ export default function Index() {
         style={tw`h1 text-foreground dark:text-dark-foreground`}
         onPress={() => signOut()}
       >
-        Sign Out
+        {t('signOut.buttonLabel')}
       </Text>
     </View>
   );

@@ -11,6 +11,7 @@ import { Alert, AlertRef } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useSupabase } from '@/context/useSupabase';
+import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 
 const FormSchema = z.object({
@@ -55,7 +56,7 @@ export default function Verify() {
       <Text
         style={tw`h1 text-foreground dark:text-dark-foreground self-start mb-5`}
       >
-        Verification
+        {t('verify.title')}
       </Text>
       <View style={tw`w-full gap-y-4`}>
         <Controller
@@ -63,7 +64,7 @@ export default function Verify() {
           name="token"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label="6 digit code"
+              label={t('verify.token.label')}
               value={value}
               onChangeText={onChange}
               onBlur={() => {
@@ -81,7 +82,7 @@ export default function Verify() {
       </View>
       <View style={tw`w-full gap-y-4 absolute bottom-[50px]`}>
         <Button
-          label="Verify"
+          label={t('verify.buttonLabel')}
           onPress={handleSubmit(onSubmit)}
           isLoading={isSubmitting}
         />
