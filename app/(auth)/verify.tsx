@@ -10,9 +10,11 @@ import * as z from 'zod';
 import { Alert, AlertRef } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { useError } from '@/context/error/useError';
 import { useSupabase } from '@/context/supabase/useSupabase';
 import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
+import { isError } from '@/types/guards';
 
 const FormSchema = z.object({
   token: z.string(),
@@ -22,6 +24,7 @@ export default function Verify() {
   const { verifyOtp } = useSupabase();
   const { email } = useLocalSearchParams();
   const alertRef = React.useRef<AlertRef>(null);
+  const { setError } = useError();
 
   const {
     control,
@@ -36,6 +39,7 @@ export default function Verify() {
     try {
       await verifyOtp(email as string, data.token, 'signup');
     } catch (error) {
+      if (isError(error)) setError(error);
       console.error(error);
     }
   }

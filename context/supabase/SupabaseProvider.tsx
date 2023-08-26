@@ -1,12 +1,12 @@
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { EmailOtpType, createClient } from '@supabase/supabase-js';
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
-import { ErrorContext } from '../error/ErrorContext';
+import { useError } from '../error/useError';
 import { SupabaseContext } from './SupabaseContext';
 import { supabaseKey, supabaseUrl } from './supabase';
 
@@ -55,7 +55,7 @@ type SupabaseProviderProps = {
 
 export const SupabaseProvider = (props: SupabaseProviderProps) => {
   const [isLoggedIn, setLoggedIn] = React.useState<boolean>(false);
-  const { setError } = useContext(ErrorContext);
+  const { setError } = useError();
 
   const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
