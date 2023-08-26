@@ -1,11 +1,16 @@
-import { setupURLPolyfill } from 'react-native-url-polyfill';
-
 import React from 'react';
+import { setupURLPolyfill } from 'react-native-url-polyfill';
+import {
+  UseMutationOptions,
+  UseQueryOptions,
+  useMutation,
+  useQuery,
+} from 'react-query';
 
-import { EmailOtpType, createClient } from '@supabase/supabase-js';
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
+import { EmailOtpType, createClient } from '@supabase/supabase-js';
 import { useError } from '../error/useError';
 import { SupabaseContext } from './SupabaseContext';
 import { supabaseKey, supabaseUrl } from './supabase';
@@ -113,6 +118,26 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
     setLoggedIn(result.data.session !== null);
   };
 
+  const useSupabaseQuery = <T,>(
+    queryKey: string,
+    queryFn: () => Promise<T>,
+    options?: Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>,
+  ) => {
+    const { data, isLoading, isError } = useQuery(queryKey, queryFn, options);
+    return { data, isLoading, isError };
+  };
+
+  const useSupabaseMutation = <T,>(
+    mutationFn: () => Promise<T>,
+    options?: UseMutationOptions<T>,
+  ) => {
+    const { mutate, isLoading, isError, data } = useMutation(
+      mutationFn,
+      options,
+    );
+    return { mutate, isLoading, isError, data };
+  };
+
   React.useEffect(() => {
     getSession();
     console.log('isLoggedIn', isLoggedIn);
@@ -129,6 +154,8 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
         signUp,
         resetPasswordForEmail,
         signOut,
+        useSupabaseQuery,
+        useSupabaseMutation,
       }}
     >
       {props.children}

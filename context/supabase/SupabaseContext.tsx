@@ -1,5 +1,6 @@
 import { EmailOtpType } from '@supabase/supabase-js';
 import { createContext } from 'react';
+import { UseMutationOptions, UseQueryOptions } from 'react-query';
 
 type SupabaseContextProps = {
   isLoggedIn: boolean;
@@ -12,6 +13,24 @@ type SupabaseContextProps = {
   signInWithPassword: (email: string, password: string) => Promise<void>;
   resetPasswordForEmail: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
+  useSupabaseQuery: <T>(
+    queryKey: string,
+    queryFn: () => Promise<T>,
+    options?: UseQueryOptions<T>,
+  ) => {
+    data: T | undefined;
+    isLoading: boolean;
+    isError: boolean;
+  };
+  useSupabaseMutation: <T>(
+    mutationFn: () => Promise<T>,
+    options?: UseMutationOptions<T>,
+  ) => {
+    mutate: () => void;
+    isLoading: boolean;
+    isError: boolean;
+    data: T | undefined;
+  };
 };
 
 export const SupabaseContext = createContext<SupabaseContextProps>({
@@ -21,4 +40,15 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
   signInWithPassword: async () => {},
   resetPasswordForEmail: async () => {},
   signOut: async () => {},
+  useSupabaseQuery: () => ({
+    data: undefined,
+    isLoading: false,
+    isError: false,
+  }),
+  useSupabaseMutation: () => ({
+    data: undefined,
+    isLoading: false,
+    isError: false,
+    mutate: async () => {},
+  }),
 });
