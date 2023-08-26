@@ -4,7 +4,9 @@
 		"strict": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./*"]
+			"@/*": ["./*"],
+			"@queries/*": ["./api/queries*"],
+			"@mutations/*": ["./api/mutations*"]
 		}
 	}
 }

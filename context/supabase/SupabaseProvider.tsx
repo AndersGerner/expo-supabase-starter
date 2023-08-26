@@ -10,7 +10,11 @@ import {
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
-import { EmailOtpType, createClient } from '@supabase/supabase-js';
+import {
+  EmailOtpType,
+  SupabaseClient,
+  createClient,
+} from '@supabase/supabase-js';
 import { useError } from '../error/useError';
 import { SupabaseContext } from './SupabaseContext';
 import { supabaseKey, supabaseUrl } from './supabase';
@@ -120,19 +124,25 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
 
   const useSupabaseQuery = <T,>(
     queryKey: string,
-    queryFn: () => Promise<T>,
+    queryFn: (supabase: SupabaseClient) => Promise<T>,
     options?: Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>,
   ) => {
-    const { data, isLoading, isError } = useQuery(queryKey, queryFn, options);
+    const queryFunction = () => queryFn(supabase); // Wrap it in another function
+    const { data, isLoading, isError } = useQuery(
+      queryKey,
+      queryFunction,
+      options,
+    );
     return { data, isLoading, isError };
   };
 
   const useSupabaseMutation = <T,>(
-    mutationFn: () => Promise<T>,
+    mutationFn: (supabase: SupabaseClient) => Promise<T>,
     options?: UseMutationOptions<T>,
   ) => {
+    const mutationFunction = () => mutationFn(supabase); // Wrap it in another function
     const { mutate, isLoading, isError, data } = useMutation(
-      mutationFn,
+      mutationFunction,
       options,
     );
     return { mutate, isLoading, isError, data };

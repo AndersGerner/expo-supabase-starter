@@ -1,4 +1,4 @@
-import { EmailOtpType } from '@supabase/supabase-js';
+import { EmailOtpType, SupabaseClient } from '@supabase/supabase-js';
 import { createContext } from 'react';
 import { UseMutationOptions, UseQueryOptions } from 'react-query';
 
@@ -15,7 +15,7 @@ type SupabaseContextProps = {
   signOut: () => Promise<void>;
   useSupabaseQuery: <T>(
     queryKey: string,
-    queryFn: () => Promise<T>,
+    queryFn: (supabase: SupabaseClient) => Promise<T>,
     options?: UseQueryOptions<T>,
   ) => {
     data: T | undefined;
@@ -23,7 +23,7 @@ type SupabaseContextProps = {
     isError: boolean;
   };
   useSupabaseMutation: <T>(
-    mutationFn: () => Promise<T>,
+    mutationFn: (supabase: SupabaseClient) => Promise<T>,
     options?: UseMutationOptions<T>,
   ) => {
     mutate: () => void;

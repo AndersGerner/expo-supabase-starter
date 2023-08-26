@@ -140,6 +140,7 @@ export default function SignUp() {
           )}
         />
       </View>
+
       <View style={tw`w-full gap-y-4 absolute bottom-[50px]`}>
         <Button
           label={t('signUp.buttonLabel')}
