@@ -4,6 +4,7 @@ export const da: Translations = {
   general: {
     welcome: 'Velkommen',
     greeting: 'Hej',
+    error: 'Fejl',
   },
   signOut: {
     buttonLabel: 'Log ud',
@@ -17,6 +18,10 @@ export const da: Translations = {
       },
     },
     buttonLabel: 'Bekræft',
+    alert: {
+      title: 'Verifikation påkrævet',
+      message: 'Tjek din e-mail for en 6-cifret kode.',
+    },
   },
   login: {
     title: 'Log ind',
@@ -67,5 +72,10 @@ export const da: Translations = {
     },
     buttonLabel: 'Opret konto',
     alreadyHaveAccount: 'Har du allerede en konto?',
+  },
+  errorBoundary: {
+    errorOccurred: 'En fejl er opstået',
+    goBack: 'Gå tilbage',
+    attemptingToReconnect: 'Forsøger at genoprette forbindelse...',
   },
 };

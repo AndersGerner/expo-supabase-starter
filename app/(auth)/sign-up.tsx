@@ -10,7 +10,7 @@ import * as z from 'zod';
 import { Alert, AlertRef } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { useSupabase } from '@/context/useSupabase';
+import { useSupabase } from '@/context/supabase/useSupabase';
 import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 import { isError } from '@/types/guards';
@@ -60,7 +60,7 @@ export default function SignUp() {
       if (isError(error)) {
         alertRef.current?.showAlert({
           variant: 'destructive',
-          title: 'Error',
+          title: t('general.error'),
           message: error.message,
         });
       }

@@ -4,6 +4,7 @@ export const en = {
   general: {
     welcome: 'Welcome',
     greeting: 'Hello',
+    error: 'Error',
   },
   signOut: {
     buttonLabel: 'Sign Out',
@@ -17,6 +18,10 @@ export const en = {
       },
     },
     buttonLabel: 'Verify',
+    alert: {
+      title: 'Verification Required',
+      message: 'Check your email for a 6-digit OTP.',
+    },
   },
   signUp: {
     email: {
@@ -67,5 +72,10 @@ export const en = {
     },
     buttonLabel: 'Login',
     noAccount: "Don't have an account?",
+  },
+  errorBoundary: {
+    errorOccurred: 'An error occurred',
+    goBack: 'Go Back',
+    attemptingToReconnect: 'Attempting to reconnect...',
   },
 } as const;

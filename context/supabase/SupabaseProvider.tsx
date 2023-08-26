@@ -1,11 +1,12 @@
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { EmailOtpType, createClient } from '@supabase/supabase-js';
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
+import { ErrorContext } from '../error/ErrorContext';
 import { SupabaseContext } from './SupabaseContext';
 import { supabaseKey, supabaseUrl } from './supabase';
 
@@ -54,6 +55,7 @@ type SupabaseProviderProps = {
 
 export const SupabaseProvider = (props: SupabaseProviderProps) => {
   const [isLoggedIn, setLoggedIn] = React.useState<boolean>(false);
+  const { setError } = useContext(ErrorContext);
 
   const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
@@ -69,7 +71,7 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
       email,
       password,
     });
-    if (error) throw error;
+    if (error) setError(error);
   };
 
   const verifyOtp = async (
@@ -82,7 +84,7 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
       token,
       type,
     });
-    if (error) throw error;
+    if (error) setError(error);
     setLoggedIn(true);
   };
 
@@ -91,18 +93,18 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
       email,
       password,
     });
-    if (error) throw error;
+    if (error) setError(error);
     setLoggedIn(true);
   };
 
   const resetPasswordForEmail = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email);
-    if (error) throw error;
+    if (error) setError(error);
   };
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    if (error) setError(error);
     setLoggedIn(false);
   };
 

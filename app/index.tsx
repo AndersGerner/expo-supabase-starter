@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 
-import { useSupabase } from '@/context/useSupabase';
+import { useSupabase } from '@/context/supabase/useSupabase';
 import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 

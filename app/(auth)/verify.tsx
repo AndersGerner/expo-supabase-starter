@@ -10,7 +10,7 @@ import * as z from 'zod';
 import { Alert, AlertRef } from '@/components/ui/Alert';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { useSupabase } from '@/context/useSupabase';
+import { useSupabase } from '@/context/supabase/useSupabase';
 import { t } from '@/lib/localization';
 import tw from '@/lib/tailwind';
 
@@ -43,8 +43,8 @@ export default function Verify() {
   React.useEffect(() => {
     alertRef.current?.showAlert({
       variant: 'default',
-      title: 'Verification Required',
-      message: 'Check your email for a 6-digit OTP.',
+      title: t('verify.alert.title'),
+      message: t('verify.alert.message'),
     });
   }, []);
 
