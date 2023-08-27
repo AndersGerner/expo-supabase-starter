@@ -1,6 +1,7 @@
 import { Slot } from 'expo-router';
 import { useDeviceContext } from 'twrnc';
 
+import { GradientBackgroundWrapper } from '@/components/ui/GradientBackgroundWrapper';
 import { ErrorBoundary } from '@/context/error/ErrorBoundary';
 import { ErrorProvider } from '@/context/error/ErrorContext';
 import { SupabaseProvider } from '@/context/supabase/SupabaseProvider';
@@ -19,9 +20,11 @@ export default function Root() {
         <QueryClientProvider client={queryClient}>
           <SupabaseProvider>
             <GestureHandlerRootView style={tw`flex-1`}>
-              <SafeAreaProvider>
-                <Slot />
-              </SafeAreaProvider>
+              <GradientBackgroundWrapper>
+                <SafeAreaProvider>
+                  <Slot />
+                </SafeAreaProvider>
+              </GradientBackgroundWrapper>
             </GestureHandlerRootView>
           </SupabaseProvider>
         </QueryClientProvider>

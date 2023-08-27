@@ -1,11 +1,14 @@
+import { BackgroundWrapper } from '@/components/ui/BackgroundWrapper';
 import { Stack } from 'expo-router';
 
 export default function AuthLayout() {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
+    <BackgroundWrapper>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+    </BackgroundWrapper>
   );
 }
