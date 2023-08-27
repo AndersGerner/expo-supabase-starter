@@ -1,19 +1,35 @@
 import tw from '@/lib/tailwind';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
 
-export const BackgroundWrapper: React.FC<{ children: React.ReactNode }> = ({
+interface IBackgroundWrapperProps {
+  children: React.ReactNode;
+  variant?: 'default' | 'secondary';
+}
+
+const BackgroundWrapper: React.FC<IBackgroundWrapperProps> = ({
   children,
+  variant = 'default',
 }) => {
-  const backgroundColor = tw.color('background') ?? '#ffffff';
+  const backgroundColor = useMemo(() => {
+    switch (variant) {
+      case 'default':
+        return tw.color('background') ?? '#ffffff';
+      case 'secondary':
+        return tw.color('background-secondary') ?? '#f0f0f0';
+      default:
+        return '#ffffff';
+    }
+  }, [variant]);
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>{children}</View>
+    <View
+      style={[tw`flex-1`, { backgroundColor }]}
+      accessibilityRole="none" // purely decorative
+    >
+      {children}
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+export default React.memo(BackgroundWrapper);

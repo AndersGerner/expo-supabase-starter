@@ -1,4 +1,3 @@
-// src/components/ui/Typography.tsx
 import tw from '@/lib/tailwind';
 import React from 'react';
 import { StyleProp, Text, TextStyle } from 'react-native';
@@ -12,12 +11,16 @@ export type TypographyVariants =
   | 'h6'
   | 'body'
   | 'caption'
-  | 'button';
+  | 'button'
+  | 'error';
 
 interface ITypographyProps {
   variant?: TypographyVariants;
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
+  color?: string;
+  textTransform?: 'uppercase' | 'lowercase' | 'capitalize';
+  accessibilityLabel?: string;
 }
 
 const variantStyles: Record<TypographyVariants, TextStyle> = {
@@ -30,12 +33,32 @@ const variantStyles: Record<TypographyVariants, TextStyle> = {
   body: tw`text-base`,
   caption: tw`text-sm`,
   button: tw`text-base font-semibold`,
+  error: tw`text-base text-red-600`,
 };
 
 export const Typography: React.FC<ITypographyProps> = ({
   variant = 'body',
   children,
   style,
+  color,
+  textTransform,
+  accessibilityLabel,
 }) => {
-  return <Text style={[variantStyles[variant], style]}>{children}</Text>;
+  const textStyle: TextStyle = {
+    ...variantStyles[variant],
+    color,
+    textTransform,
+  };
+
+  return (
+    <Text
+      style={[textStyle, style]}
+      accessibilityRole="text"
+      accessibilityLabel={accessibilityLabel}
+    >
+      {children}
+    </Text>
+  );
 };
+
+export default React.memo(Typography);

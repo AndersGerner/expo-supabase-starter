@@ -78,4 +78,9 @@ export const en = {
     goBack: 'Go Back',
     attemptingToReconnect: 'Attempting to reconnect...',
   },
+  accessibility: {
+    checkbox: { checked: 'Checked', unchecked: 'Unchecked' },
+    icon: 'Icon',
+    modal: { label: 'Modal', close: 'Close' },
+  },
 } as const;

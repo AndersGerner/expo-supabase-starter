@@ -1,23 +1,36 @@
-// DynamicGradientBackground.js
 import tw from '@/lib/tailwind';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
 
-export const GradientBackgroundWrapper: React.FC<{
+interface IGradientBackgroundWrapperProps {
   children: React.ReactNode;
-}> = ({ children }) => {
+  variant?: 'default' | 'inverse';
+  direction?: 'horizontal' | 'vertical';
+}
+
+export const GradientBackgroundWrapper: React.FC<
+  IGradientBackgroundWrapperProps
+> = ({ children, variant = 'default', direction = 'horizontal' }) => {
   const firstColor = tw.color('muted') ?? '#000000';
   const secondColor = tw.color('muted-foreground') ?? '#ffffff';
-  const gradientColors = [firstColor, secondColor];
+
+  const gradientColors = useMemo(() => {
+    return variant === 'inverse'
+      ? [secondColor, firstColor]
+      : [firstColor, secondColor];
+  }, [firstColor, secondColor, variant]);
+
+  const start = direction === 'horizontal' ? { x: 0, y: 0 } : { x: 0, y: 1 };
+  const end = direction === 'horizontal' ? { x: 1, y: 0 } : { x: 1, y: 1 };
 
   return (
-    <View style={styles.container}>
+    <View style={tw`absolute inset-0 flex-1`}>
       <LinearGradient
         colors={gradientColors}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradient}
+        start={start}
+        end={end}
+        style={tw`flex-1`}
       >
         {children}
       </LinearGradient>
@@ -25,16 +38,4 @@ export const GradientBackgroundWrapper: React.FC<{
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  gradient: {
-    flex: 1,
-  },
-});
+export default React.memo(GradientBackgroundWrapper);
