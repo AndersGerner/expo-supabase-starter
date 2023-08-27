@@ -1,3 +1,4 @@
+import { Database } from '@/types/database';
 import { EmailOtpType, SupabaseClient } from '@supabase/supabase-js';
 import { createContext } from 'react';
 import { UseMutationOptions, UseQueryOptions } from 'react-query';
@@ -15,18 +16,18 @@ type SupabaseContextProps = {
   signOut: () => Promise<void>;
   useSupabaseQuery: <T>(
     queryKey: string,
-    queryFn: (supabase: SupabaseClient) => Promise<T>,
+    queryFn: (supabase: SupabaseClient<Database>) => Promise<T>,
     options?: UseQueryOptions<T>,
   ) => {
     data: T | undefined;
     isLoading: boolean;
     isError: boolean;
   };
-  useSupabaseMutation: <T>(
-    mutationFn: (supabase: SupabaseClient) => Promise<T>,
-    options?: UseMutationOptions<T>,
+  useSupabaseMutation: <T, U>(
+    mutationFn: (supabase: SupabaseClient<Database>, data: U) => Promise<T>,
+    options?: UseMutationOptions<T, unknown, U>,
   ) => {
-    mutate: () => void;
+    mutateAsync: (data: U) => Promise<T>;
     isLoading: boolean;
     isError: boolean;
     data: T | undefined;
@@ -45,10 +46,10 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
     isLoading: false,
     isError: false,
   }),
-  useSupabaseMutation: () => ({
+  useSupabaseMutation: <T,>() => ({
     data: undefined,
     isLoading: false,
     isError: false,
-    mutate: async () => {},
+    mutateAsync: async () => Promise.resolve(undefined as unknown as T),
   }),
 });

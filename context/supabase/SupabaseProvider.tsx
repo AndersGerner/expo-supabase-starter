@@ -10,6 +10,7 @@ import {
 import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
+import { Database } from '@/types/database';
 import {
   EmailOtpType,
   SupabaseClient,
@@ -66,7 +67,7 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
   const [isLoggedIn, setLoggedIn] = React.useState<boolean>(false);
   const { setError } = useError();
 
-  const supabase = createClient(supabaseUrl, supabaseKey, {
+  const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
     auth: {
       storage: ExpoSecureStoreAdapter,
       autoRefreshToken: true,
@@ -136,16 +137,17 @@ export const SupabaseProvider = (props: SupabaseProviderProps) => {
     return { data, isLoading, isError };
   };
 
-  const useSupabaseMutation = <T,>(
-    mutationFn: (supabase: SupabaseClient) => Promise<T>,
-    options?: UseMutationOptions<T>,
+  const useSupabaseMutation = <T, U>(
+    mutationFn: (supabase: SupabaseClient<Database>, data: U) => Promise<T>,
+    options?: UseMutationOptions<T, unknown, U>,
   ) => {
-    const mutationFunction = () => mutationFn(supabase); // Wrap it in another function
-    const { mutate, isLoading, isError, data } = useMutation(
-      mutationFunction,
-      options,
-    );
-    return { mutate, isLoading, isError, data };
+    const mutationFunction = (data: U) => mutationFn(supabase, data); // Wrap it in another function
+    const { mutateAsync, isLoading, isError, data } = useMutation<
+      T,
+      unknown,
+      U
+    >(mutationFunction, options);
+    return { mutateAsync, isLoading, isError, data };
   };
 
   React.useEffect(() => {

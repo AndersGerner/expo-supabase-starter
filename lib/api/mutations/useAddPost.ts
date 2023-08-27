@@ -1,33 +1,21 @@
 import { useSupabase } from '@/context/supabase/useSupabase';
+import { Database } from '@/types/database';
 
-/**
- * Type definition for a Post.
- * This should match the schema of the 'posts' table in your Supabase database.
- */
-export type Post = {
-  id: string;
-  title: string;
-  content: string;
-  is_published: boolean;
-};
+export const useAddPost = () => {
+  const { useSupabaseMutation } = useSupabase();
 
-/**
- * Custom hook to fetch posts.
- *
- * Usage:
- * const { data, isLoading, isError } = useFetchPosts();
- *
- * To adapt for a new table:
- * 1. Update the type definition to match the new table schema.
- * 2. Update the query function to query the new table.
- */
-export const useFetchPosts = () => {
-  const { useSupabaseQuery } = useSupabase();
+  return useSupabaseMutation<
+    Database['public']['Tables']['posts']['Row'],
+    Database['public']['Tables']['posts']['Insert']
+  >(async (supabase, newPost) => {
+    const { data, error } = await supabase.from('posts').insert([newPost]);
 
-  // Explicitly type the function here
-  return useSupabaseQuery<Post[]>('posts', async (supabase) => {
-    const { data, error } = await supabase.from('posts').select('*');
     if (error) throw error;
-    return data as Post[];
+
+    if (!data) {
+      throw new Error('Insert operation returned null');
+    }
+
+    return data[0];
   });
 };

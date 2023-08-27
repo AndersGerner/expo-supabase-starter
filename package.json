@@ -7,7 +7,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "generate:types": "ts-node scripts/generateSupabaseTypes.ts",
+    "functions:deploy": "supabase deploy function",
+    "functions:create": "supabase functions new "
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",
